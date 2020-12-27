@@ -57,12 +57,22 @@ class Game extends React.Component {
     })
   }
 
+  resetBtn(){
+    this.setState({
+      history: [{
+        squares: Array(9).fill(null),
+      }],
+      stepNumber: 0,
+      xIsNext: true,
+    })
+  }
+
   render(){
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = this.calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    const moves = history.map((step, move) => { // moveがindex
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
@@ -74,8 +84,13 @@ class Game extends React.Component {
     });
 
     let status;
+    let startBtn;
     if (winner) {
       status = 'Winner: ' + winner;
+      startBtn =
+        <li>
+          <button onClick={() => this.resetBtn()}>ゲームをリセットする</button>
+        </li>
     }
     else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
@@ -91,6 +106,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <ol>{startBtn}</ol>
           <ol>{moves}</ol>
         </div>
       </div>
